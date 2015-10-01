@@ -71,6 +71,9 @@ class Coldata (object):
     def transpose (rows):
         """Транспонировать массив"""
         rows_count = len (rows)
+        if not len (rows):
+            return rows
+
         cols_count = len (rows[0])
 
         result = []
