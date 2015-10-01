@@ -8,9 +8,9 @@
 
 
 class Coldata (object):
-    def __init__ (self, fname = "", skiprows = 0):
+    def __init__ (self, fname = None, skiprows=0):
         self.data = []
-        if len(fname) != 0:
+        if fname:
             self.load (fname, skiprows)
 
 
@@ -29,7 +29,7 @@ class Coldata (object):
         self.data.append (column)
 
 
-    def load (self, fname, skiprows = 0):
+    def load (self, fname, skiprows=0):
         """Загрузить столбцы из файла"""
         self.data = []
 
@@ -87,7 +87,7 @@ class Coldata (object):
         return row
 
 
-    def tostr (self, format = "%f", deliver = "\t"):
+    def tostr (self, format="%f", deliver="\t"):
         """Преобразовать в строку
         format - вормат вывода (%f, %d, %.3f и т.д.)
         deliver - разделитель между столбцами"""
@@ -116,7 +116,7 @@ class Coldata (object):
         return result
 
 
-    def save (self, fname, format = "%f", deliver = "\t", header=None):
+    def save (self, fname, format="%f", deliver="\t", header=None):
         strval = self.tostr (format, deliver)
 
         fp = file (fname, "w")
