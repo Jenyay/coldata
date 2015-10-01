@@ -7,7 +7,7 @@
 """
 
 
-class Coldata (object):
+class ColdataReader (object):
     def __init__ (self, fname = None, skiprows=0):
         self.data = []
         if fname:
@@ -88,50 +88,3 @@ class Coldata (object):
         elements = line.split()
         row = [float (element.replace (",", ".")) for element in elements]
         return row
-
-
-    def tostr (self, format="%f", deliver="\t"):
-        """Преобразовать в строку
-        format - вормат вывода (%f, %d, %.3f и т.д.)
-        deliver - разделитель между столбцами"""
-        length = [len (col) for col in self.data]
-        maxlength = max (length)
-
-        colcount = len (self.data)
-
-        result = u""
-        # Цикл по строкам
-        for rownumber in xrange (maxlength):
-            rowstr = ""
-
-            # Перебираем столбцы
-            for colnumber in xrange (colcount):
-                # Если в этом столбце еще есть числа, добавим их
-                if rownumber < len (self.data[colnumber]):
-                    rowstr += format % (self.data[colnumber][rownumber])
-
-                if colnumber != colcount - 1:
-                    rowstr += deliver
-                else:
-                    rowstr += "\n"
-
-            result += rowstr
-        return result
-
-
-    def save (self, fname, format="%f", deliver="\t", header=None):
-        strval = self.tostr (format, deliver)
-
-        fp = file (fname, "w")
-        if header is not None:
-            fp.write (header + "\n")
-        fp.write (strval)
-        fp.close()
-
-
-def save (columns, fname, format = "%f", deliver = "\t", header=None):
-    coldata_obj = Coldata ()
-    for column in columns:
-        coldata_obj.addcolumn (column)
-
-    coldata_obj.save (fname, format, deliver, header)
