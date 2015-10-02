@@ -88,3 +88,56 @@ class ColdataReader (object):
         elements = line.split()
         row = [float (element.replace (",", ".")) for element in elements]
         return row
+
+
+class ColdataWriter (object):
+    """
+    Класс для записи табличных данных в файл или вывода в виде строк
+    """
+    def __init__ (self, format=None, header=None):
+        self._format = format
+        self._header = header
+        self._separator = u'\t'
+        self._defaultFormat = u'{:g}'
+
+
+    @property
+    def format (self):
+        return self._format
+
+
+    @format.setter
+    def format (self, value):
+        self._format = value
+
+
+    @property
+    def header (self):
+        return self._header
+
+    @header.setter
+    def header (self, value):
+        self._header = value
+
+
+    def iteritems (self, data):
+        if self._header is not None:
+            yield self._header
+
+        if data is not None:
+            iterators = [iter (column) for column in data]
+            for row in zip (*iterators):
+                yield self._formatRow (*row)
+
+
+    def _formatRow (self, *args):
+        if self._format is not None:
+            template = self._format
+        else:
+            template = self._separator.join (
+                [self._defaultFormat] * len (args)
+            )
+
+        result = template.format (*args)
+
+        return result
