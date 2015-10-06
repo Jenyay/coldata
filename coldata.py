@@ -3,8 +3,11 @@
 © 2008-2015 Jenyay (jenyay.ilin@gmail.com)
 Домашняя страница: http://jenyay.net
 Страница скрипта: http://jenyay.net/Programming/Coldata
-Версия 2.0
 """
+
+__version__ = "2.0"
+__versionTime__ = "10 Oct 2015"
+__author__ = "Eugeniy Ilin <jenyay.ilin@gmail.com>"
 
 import codecs
 
