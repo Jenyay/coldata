@@ -35,7 +35,7 @@ class ColdataReader (object):
         """Загрузить столбцы из файла"""
         self.data = []
 
-        with codecs.open (fname, "r", "utf-8") as fp:
+        with codecs.open (fname, 'r', 'utf-8') as fp:
             lines = fp.readlines()
 
         # Массив еще не заполнялся данными
@@ -87,7 +87,7 @@ class ColdataReader (object):
 
     def parseline (self, line):
         elements = line.split()
-        row = [float (element.replace (",", ".")) for element in elements]
+        row = [float (element.replace (',', '.')) for element in elements]
         return row
 
 
@@ -145,7 +145,7 @@ class ColdataWriter (object):
 
 
     def tofile (self, data, filename):
-        with codecs.open (filename, "w", "utf-8") as fp:
+        with codecs.open (filename, 'w', 'utf-8') as fp:
             for n, line in enumerate (self.iteritems (data)):
                 if n != 0:
                     fp.write (u'\n' + line)
