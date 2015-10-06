@@ -35,9 +35,8 @@ class ColdataReader (object):
         """Загрузить столбцы из файла"""
         self.data = []
 
-        fp = file (fname)
-        lines = fp.readlines()
-        fp.close()
+        with codecs.open (fname, "r", "utf-8") as fp:
+            lines = fp.readlines()
 
         # Массив еще не заполнялся данными
         res_empty = True
