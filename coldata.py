@@ -6,6 +6,8 @@
 Версия 2.0
 """
 
+import codecs
+
 
 class ColdataReader (object):
     def __init__ (self, fname = None, skiprows=0):
@@ -141,6 +143,15 @@ class ColdataWriter (object):
             iterators = [iter (column) for column in data]
             for row in zip (*iterators):
                 yield self._formatRow (*row)
+
+
+    def tofile (self, data, filename):
+        with codecs.open (filename, "w", "utf-8") as fp:
+            for n, line in enumerate (self.iteritems (data)):
+                if n != 0:
+                    fp.write (u'\n' + line)
+                else:
+                    fp.write (line)
 
 
     def _formatRow (self, *args):

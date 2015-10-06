@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import os.path
+import shutil
+import tempfile
 import unittest
+import codecs
 
 import coldata
 
@@ -46,6 +50,15 @@ class ColdataReaderTest (unittest.TestCase):
 
 
 class ColdataWriterTest (unittest.TestCase):
+    def setUp (self):
+        self._tempDirName = None
+
+
+    def tearDown (self):
+        if self._tempDirName is not None:
+            shutil.rmtree (self._tempDirName)
+
+
     def testEmpty (self):
         writer = coldata.ColdataWriter()
         result = list (writer.iteritems ([]))
@@ -285,6 +298,65 @@ class ColdataWriterTest (unittest.TestCase):
             u'00.50\t42.00',
             u'-1.00\t11.50',
             u'00.00\t20.00',
+            u'01.00\t20.50',
+        ]
+
+        self.assertEqual (result, validResult)
+
+
+    def testCommonFormat_03_tofile (self):
+        self._tempDirName = tempfile.mkdtemp (prefix=u'coldata_')
+        fname = os.path.join (self._tempDirName, u'write_01.txt')
+
+        commonFormat = u'{:05.2f}'
+        col1 = [0.5, -1.0, 0, 1]
+        col2 = [42, 11.5, 20, 20.5]
+        data = [col1, col2]
+
+        writer = coldata.ColdataWriter()
+        writer.commonFormat = commonFormat
+        writer.tofile (data, fname)
+
+        self.assertTrue (os.path.exists (fname))
+
+        with codecs.open (fname, "r", "utf-8") as fp:
+            result = fp.readlines ()
+
+        validResult = [
+            u'00.50\t42.00\n',
+            u'-1.00\t11.50\n',
+            u'00.00\t20.00\n',
+            u'01.00\t20.50',
+        ]
+
+        self.assertEqual (result, validResult)
+
+
+    def testCommonFormat_04_tofile_header (self):
+        self._tempDirName = tempfile.mkdtemp (prefix=u'coldata_')
+        fname = os.path.join (self._tempDirName, u'write_01.txt')
+
+        commonFormat = u'{:05.2f}'
+        header = u'Бла-бла-бла'
+        col1 = [0.5, -1.0, 0, 1]
+        col2 = [42, 11.5, 20, 20.5]
+        data = [col1, col2]
+
+        writer = coldata.ColdataWriter()
+        writer.commonFormat = commonFormat
+        writer.header = header
+        writer.tofile (data, fname)
+
+        self.assertTrue (os.path.exists (fname))
+
+        with codecs.open (fname, "r", "utf-8") as fp:
+            result = fp.readlines ()
+
+        validResult = [
+            header + u'\n',
+            u'00.50\t42.00\n',
+            u'-1.00\t11.50\n',
+            u'00.00\t20.00\n',
             u'01.00\t20.50',
         ]
 
