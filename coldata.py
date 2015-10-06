@@ -14,6 +14,8 @@ import codecs
 
 class ColdataReader (object):
     def __init__ (self, fname = None, skiprows=0):
+        self._encoding = u'utf-8'
+
         self.data = []
         if fname:
             self.load (fname, skiprows)
@@ -38,35 +40,38 @@ class ColdataReader (object):
         """Загрузить столбцы из файла"""
         self.data = []
 
-        with codecs.open (fname, 'r', 'utf-8') as fp:
-            lines = fp.readlines()
-
         # Массив еще не заполнялся данными
         res_empty = True
 
         # Массив из строк
         result_rows = []
 
-        for line in lines[skiprows:]:
-            try:
-                row = self.parseline (line)
-
-                if len (row) == 0:
+        with codecs.open (fname, 'r', self._encoding) as fp:
+            n = 0
+            for line in fp:
+                n += 1
+                if n <= skiprows:
                     continue
 
-                if res_empty:
-                    res_empty = False
-                    result_rows.append (row)
-                else:
-                    if len (row) == len (result_rows[0]):
+                try:
+                    row = self.parseline (line)
+
+                    if len (row) == 0:
+                        continue
+
+                    if res_empty:
+                        res_empty = False
                         result_rows.append (row)
                     else:
+                        if len (row) == len (result_rows[0]):
+                            result_rows.append (row)
+                        else:
+                            break
+                except ValueError:
+                    if not res_empty:
+                        # Ошибка разбора очередной строки,
+                        # но до этого уже были успешно разобранные строки
                         break
-            except ValueError:
-                if not res_empty:
-                    # Ошибка разбора очередной строки,
-                    # но до этого уже были успешно разобранные строки
-                    break
 
         self.data = self.transpose (result_rows)
 
@@ -106,6 +111,7 @@ class ColdataWriter (object):
         self._header = header
         self._separator = u'\t'
         self._commonFormat = commonFormat
+        self._encoding = u'utf-8'
 
 
     @property
@@ -148,7 +154,7 @@ class ColdataWriter (object):
 
 
     def tofile (self, data, filename):
-        with codecs.open (filename, 'w', 'utf-8') as fp:
+        with codecs.open (filename, 'w', self._encoding) as fp:
             for n, line in enumerate (self.iteritems (data)):
                 if n != 0:
                     fp.write (u'\n' + line)

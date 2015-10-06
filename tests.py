@@ -48,6 +48,68 @@ class ColdataReaderTest (unittest.TestCase):
         self.assertEqual (data[0], [0.0, 1.128, 2.35, -1.258, -3.33e-1])
 
 
+    def testSkip_01 (self):
+        fname = u'testdata/sample_single.txt'
+        data = coldata.ColdataReader (fname, skiprows=1)
+        self.assertEqual (len (data), 1)
+        self.assertEqual (data[0], [1.128, 2.35, -1.258, -3.33e-1])
+
+
+    def testSkip_02 (self):
+        fname = u'testdata/sample_no_header.txt'
+        data = coldata.ColdataReader (fname, skiprows=1)
+
+        testColumn1 = [-1.1280, 2.3500, -1.2580, -0.3300]
+        testColumn2 = [5.2687, 9.1576, -1.2457, 95.3654]
+
+        self.assertEqual (len (data), 2)
+        self.assertEqual (data[0], testColumn1)
+        self.assertEqual (data[1], testColumn2)
+
+
+    def testSkip_03 (self):
+        fname = u'testdata/sample_rus.txt'
+        data = coldata.ColdataReader (fname, skiprows=1)
+
+        testColumn1 = [0.0000, -1.1280, 2.3500, -1.2580, -0.3300]
+        testColumn2 = [1.2512, 5.2687, 9.1576, -1.2457, 95.3654]
+
+        self.assertEqual (len (data), 2)
+        self.assertEqual (data[0], testColumn1)
+        self.assertEqual (data[1], testColumn2)
+
+
+    def testSkip_04 (self):
+        fname = u'testdata/sample_rus.txt'
+        data = coldata.ColdataReader (fname, skiprows=3)
+
+        testColumn1 = [0.0000, -1.1280, 2.3500, -1.2580, -0.3300]
+        testColumn2 = [1.2512, 5.2687, 9.1576, -1.2457, 95.3654]
+
+        self.assertEqual (len (data), 2)
+        self.assertEqual (data[0], testColumn1)
+        self.assertEqual (data[1], testColumn2)
+
+
+    def testSkip_05 (self):
+        fname = u'testdata/sample_rus.txt'
+        data = coldata.ColdataReader (fname, skiprows=4)
+
+        testColumn1 = [-1.1280, 2.3500, -1.2580, -0.3300]
+        testColumn2 = [5.2687, 9.1576, -1.2457, 95.3654]
+
+        self.assertEqual (len (data), 2)
+        self.assertEqual (data[0], testColumn1)
+        self.assertEqual (data[1], testColumn2)
+
+
+    def testSkip_06 (self):
+        fname = u'testdata/sample_rus.txt'
+        data = coldata.ColdataReader (fname, skiprows=1000)
+
+        self.assertEqual (len (data), 0)
+
+
 
 class ColdataWriterTest (unittest.TestCase):
     def setUp (self):
