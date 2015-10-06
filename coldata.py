@@ -94,11 +94,14 @@ class ColdataWriter (object):
     """
     Класс для записи табличных данных в файл или вывода в виде строк
     """
-    def __init__ (self, format=None, header=None):
+    def __init__ (self,
+                  format=None,
+                  header=None,
+                  commonFormat=u'{:g}'):
         self._format = format
         self._header = header
         self._separator = u'\t'
-        self._defaultFormat = u'{:g}'
+        self._commonFormat = commonFormat
 
 
     @property
@@ -120,6 +123,16 @@ class ColdataWriter (object):
         self._header = value
 
 
+    @property
+    def commonFormat (self):
+        return self._commonFormat
+
+
+    @commonFormat.setter
+    def commonFormat (self, value):
+        self._commonFormat = value
+
+
     def iteritems (self, data):
         if self._header is not None:
             yield self._header
@@ -135,7 +148,7 @@ class ColdataWriter (object):
             template = self._format
         else:
             template = self._separator.join (
-                [self._defaultFormat] * len (args)
+                [self._commonFormat] * len (args)
             )
 
         result = template.format (*args)

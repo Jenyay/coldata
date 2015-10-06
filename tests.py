@@ -252,6 +252,43 @@ class ColdataWriterTest (unittest.TestCase):
         self.assertEqual (result, validResult)
 
 
+    def testCommonFormat_01 (self):
+        commonFormat = u'{:05.2f}'
+        col1 = [0.5, -1.0, 0, 1]
+        col2 = [42, 11.5, 20, 20.5]
+        data = [col1, col2]
+
+        writer = coldata.ColdataWriter (commonFormat=commonFormat)
+        result = list (writer.iteritems (data))
+
+        validResult = [
+            u'00.50\t42.00',
+            u'-1.00\t11.50',
+            u'00.00\t20.00',
+            u'01.00\t20.50',
+        ]
+
+        self.assertEqual (result, validResult)
+
+
+    def testCommonFormat_02 (self):
+        commonFormat = u'{:05.2f}'
+        col1 = [0.5, -1.0, 0, 1]
+        col2 = [42, 11.5, 20, 20.5]
+        data = [col1, col2]
+
+        writer = coldata.ColdataWriter()
+        writer.commonFormat = commonFormat
+        result = list (writer.iteritems (data))
+
+        validResult = [
+            u'00.50\t42.00',
+            u'-1.00\t11.50',
+            u'00.00\t20.00',
+            u'01.00\t20.50',
+        ]
+
+        self.assertEqual (result, validResult)
 
 
 
