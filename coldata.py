@@ -5,8 +5,8 @@
 Страница скрипта: http://jenyay.net/Programming/Coldata
 """
 
-__version__ = "2.0"
-__versionTime__ = "10 Oct 2015"
+__version__ = "2.0.1"
+__versionTime__ = "19 Jan 2016"
 __author__ = "Eugeniy Ilin <jenyay.ilin@gmail.com>"
 
 import codecs
@@ -17,6 +17,7 @@ class ColdataReader (object):
         self._encoding = u'utf-8'
 
         self.data = []
+        self.header = u''
         if fname:
             self.load (fname, skiprows)
 
@@ -45,12 +46,14 @@ class ColdataReader (object):
 
         # Массив из строк
         result_rows = []
+        header_lines = []
 
         with codecs.open (fname, 'r', self._encoding) as fp:
             n = 0
             for line in fp:
                 n += 1
                 if n <= skiprows:
+                    header_lines.append (line.rstrip())
                     continue
 
                 try:
@@ -74,6 +77,7 @@ class ColdataReader (object):
                         break
 
         self.data = self.transpose (result_rows)
+        self.header = u'\n'.join (header_lines)
 
 
     @staticmethod

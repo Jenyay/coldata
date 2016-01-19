@@ -110,6 +110,18 @@ class ColdataReaderTest (unittest.TestCase):
         self.assertEqual (len (data), 0)
 
 
+    def testHeader_01 (self):
+        fname = u'testdata/sample_rus.txt'
+        data = coldata.ColdataReader (fname, skiprows=3)
+
+        header = u'''Пример данных ASCII
+Значение1    Значение2
+-------------------'''
+
+        self.assertEqual (len (data), 2)
+        self.assertEqual (data.header, header)
+
+
 
 class ColdataWriterTest (unittest.TestCase):
     def setUp (self):
